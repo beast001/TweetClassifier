@@ -1,0 +1,10 @@
+pandas
+plost
+streamlit>=1.14.0<1.15.0
+textblob>=0.15.0<1.0.0
+altair>=0.18.0<0.19.0
+htbuilder>=0.3.0<1.0.0
+click==8
+scikit_learn==1.1.0.
+matplotlib==3.3.4
+
