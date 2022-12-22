@@ -1,7 +1,7 @@
-# 📦 Dashboard (`version 2`)
+# 📦 Safaricom_care Tweeter Classifier (`version 1.0`)
 
-This is a dashboard app created in Python using Streamlit.
+This is a demo app created in Python using Streamlit.
 
 ## Demo App
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://dash-board.streamlitapp.com/)
+[![Streamlit App](https://beast001-tweetclassifier-dashboard-r3ooki.streamlit.app/)](https://beast001-tweetclassifier-dashboard-r3ooki.streamlit.app/)
