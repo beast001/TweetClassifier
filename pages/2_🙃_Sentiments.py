@@ -13,6 +13,11 @@ from textblob import TextBlob
 from nltk.stem import WordNetLemmatizer
 import numpy as np
 from textblob import Word
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+nltk.download('omw-1.4')
 
 #Global Variables
 all_tweets = 0
