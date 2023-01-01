@@ -81,6 +81,7 @@ def get_time(hour):
 today = str(date.today())
 #@st.cache(allow_output_mutation=True)
 def getTweets(sincedate=today, untildate=today, maxTweets=100):
+    maxTweets = maxTweets -1
     # Creating list to append tweet data to
     tweets_list = []
     # Using TwitterSearchScraper to scrape data and append tweets to list
@@ -88,7 +89,7 @@ def getTweets(sincedate=today, untildate=today, maxTweets=100):
     for i,tweet in enumerate(sntwitter.TwitterSearchScraper('Safaricom_Care since:2016-01-20').get_items()):
         if len(tweets_list)>maxTweets:
             break
-        elif  tweet.username != "Safaricom_Care":
+        elif  tweet.username != "Safaricom_Care" and tweet.replyCount == 0 :
              tweets_list.append([tweet.date, tweet.id, tweet.content, tweet.username, tweet.replyCount,'https://twitter.com/anyuser/status/'+str(tweet.id)])
     # Creating a dataframe from the tweets list above
     #tweets_df = pd.DataFrame(tweets_list, columns=['Datetime', 'Tweet Id', 'Text', 'Username'])
@@ -177,8 +178,16 @@ df.Prediction.replace({4:"Value added Service"},inplace=True)
 df.Prediction.replace({5:"Voice"},inplace=True)
 df.Prediction.replace({0:"Customer Care"},inplace=True)
 
+def make_clickable(link):
+    # target _blank to open new window
+    # extract clickable text to display for your link
+    return f'<a target="_blank" href="{link}">View</a>'
+
+# Column to view tweets with hyperlinks
+df['Open'] = df['View'].apply(make_clickable)
+
 # Row 1
-st.markdown('### Metrics')
+st.markdown('### Predictions for all Unreplied Tweets')
 #row 1 columns
 with st.container():
     left_column, center_column,right_column =  st.columns(3)
@@ -205,29 +214,41 @@ with st.container():
 if dept_select == 'General':
     #st.write(df.to_html(escape=False, index=False), unsafe_allow_html=True)
     st.markdown('## General Department')
-    AgGrid(df[df['Prediction'] == "General"])
+    df_unique = df[df['Prediction'] == "General"]
+    st.write(df_unique[['Datetime', 'Text', 'Username','Open']].to_html(escape=False, index=False), unsafe_allow_html=True)
+
 elif dept_select == 'Mpesa':
     st.markdown('## Mpesa Depertments')
-    AgGrid(df[df['Prediction'] == "Mpesa"])
+    df_unique = df[df['Prediction'] == "Mpesa"]
+    st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
     
 elif dept_select == 'Internet':
     st.markdown('## Internet Depertments')
-    AgGrid(df[df['Prediction'] == "Internet"])
+    df_unique = df[df['Prediction'] == "Internet"]
+    st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif dept_select == 'Value Added Services':
     st.markdown('## Value Added Services Depertments')
-    AgGrid(df[df['Prediction'] == "Value added Service"])
+    df_unique = df[df['Prediction'] == "Value added Service"]
+    st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif dept_select == 'Voice':
     st.markdown('## Voice Depertments')
-    AgGrid(df[df['Prediction'] == "Voice"])
+    df_unique = df[df['Prediction'] == "Voice"]
+    st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif dept_select == 'Customer Care':
     st.markdown('## Customer Care')
-    AgGrid(df[df['Prediction'] == "Customer Care"])
+    df_unique = df[df['Prediction'] == "Customer Care"]
+    st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 else:
-    st.markdown('## All Depertments') 
-    AgGrid(df)
+    st.markdown('## All Depertments')
+
+    st.write(df[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
+
+
+
+
 
 
 

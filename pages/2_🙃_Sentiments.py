@@ -94,6 +94,7 @@ def get_time(hour):
 today = str(date.today())
 #@st.cache(allow_output_mutation=True)
 def getTweets(sincedate=today, untildate=today, maxTweets=100):
+    maxTweets = maxTweets -1
     # Creating list to append tweet data to
     tweets_list = []
     # Using TwitterSearchScraper to scrape data and append tweets to list
@@ -167,7 +168,16 @@ col1, col2, col3 = st.columns(3)
 col1.metric("Neutral Emotions", len(df[df['sentiment']=="Neutral emotion"]))
 col2.metric("Negative Emotions", len(df[df['sentiment']=="Negative emotion"]) )
 col3.metric("Positive Emotions", len(df[df['sentiment']=="Positive emotion"]))
-st.write(df[["Text", "polarity","sentiment","View"]])
+
+def make_clickable(link):
+    # target _blank to open new window
+    # extract clickable text to display for your link
+    return f'<a target="_blank" href="{link}">View</a>'
+
+# Column to view tweets with hyperlinks
+df['Open'] = df['View'].apply(make_clickable)
+st.write(df[['Datetime', 'Text', 'Username','polarity','sentiment','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
+
 
 
 

@@ -73,6 +73,7 @@ def get_time(hour):
 today = str(date.today())
 #@st.cache(allow_output_mutation=True)
 def getTweets(sincedate=today, untildate=today, maxTweets=100):
+    maxTweets = maxTweets -1
     # Creating list to append tweet data to
     tweets_list = []
     # Using TwitterSearchScraper to scrape data and append tweets to list
