@@ -128,7 +128,7 @@ dept_select = st.sidebar.selectbox('Select data', ('General', 'Mpesa', 'Internet
 
 st.sidebar.markdown('''
 ---
-Created with by [Antony Brian](https://www.linkedin.com/in/africandatascientist/).
+Created with by [Team Alpha](https://github.com/beast001/TweetClassifier/).
 ''')
 df = getTweets(tweete_from, tweete_to, tweet_count)
 #creating clean tweets

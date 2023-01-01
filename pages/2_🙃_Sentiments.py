@@ -102,7 +102,7 @@ def getTweets(sincedate=today, untildate=today, maxTweets=100):
     for i,tweet in enumerate(sntwitter.TwitterSearchScraper('Safaricom_Care since:2016-01-20').get_items()):
         if len(tweets_list)>maxTweets:
             break
-        elif  tweet.username != "Safaricom_Care":
+        elif  tweet.username != "Safaricom_Care" and tweet.replyCount == 0:
              tweets_list.append([tweet.date, tweet.id, tweet.content, tweet.username, tweet.replyCount,'https://twitter.com/anyuser/status/'+str(tweet.id)])
     # Creating a dataframe from the tweets list above
     #tweets_df = pd.DataFrame(tweets_list, columns=['Datetime', 'Tweet Id', 'Text', 'Username'])
@@ -133,15 +133,13 @@ tweete_to = str(st.sidebar.date_input("To",date.today()))
 tweet_count = st.sidebar.slider('Specify Number Of Tweets', 200, 5000, 20)
 
 #st.sidebar.subheader('Select Department To Work On')
-#dept_select = st.sidebar.selectbox('Select data', ('General', 'Mpesa', 'Internet', 'Value Added Services', 'Voice', 'Customer Care', 'All Departments'))
+st.sidebar.subheader('Select Sentiment To Work On')
+sentiment_select = st.sidebar.selectbox('Select Mood', ('All','Positive', 'Negative', 'Neutral'))
 
-#st.sidebar.subheader('Line chart parameters')
-#plot_data = st.sidebar.multiselect('Select data', ['temp_min', 'temp_max'], ['temp_min', 'temp_max'])
-#plot_height = st.sidebar.slider('Specify plot height', 200, 500, 250)
 
 st.sidebar.markdown('''
 ---
-Created with by [Antony Brian](https://www.linkedin.com/in/africandatascientist/).
+Created with by [Team Alpha](https://github.com/beast001/TweetClassifier/).
 ''')
 df = getTweets(tweete_from, tweete_to, tweet_count)
 #creating clean tweets
@@ -162,7 +160,7 @@ df.loc[(df["polarity"]>=0.4),"sentiment"] = "Positive emotion"
 df.loc[(df["polarity"]<0),"sentiment"] = "Negative emotion"
 df.loc[(df["polarity"].between(0,0.4,inclusive="left")),"sentiment"] = "Neutral emotion"
 
-st.markdown('Sentiments')
+st.markdown('### Sentiments')
 
 col1, col2, col3 = st.columns(3)
 col1.metric("Neutral Emotions", len(df[df['sentiment']=="Neutral emotion"]))
@@ -176,8 +174,33 @@ def make_clickable(link):
 
 # Column to view tweets with hyperlinks
 df['Open'] = df['View'].apply(make_clickable)
-st.write(df[['Datetime', 'Text', 'Username','polarity','sentiment','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
+with st.expander("ℹ️ How to interpret the results", expanded=False):
+    st.write(
+        """
+        **Polarity**: Polarity is a float which lies in the range of [-1,1] where 1 means positive statement and -1 means a negative statement
+        """
+    )
+    st.write("")
+
+if sentiment_select == 'Positive':
+    #st.write(df.to_html(escape=False, index=False), unsafe_allow_html=True)
+    st.markdown('## Positive Sentiments')
+    df_unique = df[df['sentiment'] == 'Positive emotion']
+    st.write(df_unique[['Datetime', 'Text', 'Username','polarity','sentiment','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
+
+elif sentiment_select == 'Negative':
+    st.markdown('## Negative Sentiments')
+    df_unique = df[df['sentiment'] == "Negative emotion"]
+    st.write(df_unique[['Datetime', 'Text', 'Username','polarity','sentiment','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
+elif sentiment_select == 'Neutral':
+    st.markdown('## Neutral Sentiments')
+    df_unique = df[df['sentiment'] == "Neutral emotion"]
+    st.write(df_unique[['Datetime', 'Text', 'Username','polarity','sentiment','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
+
+else:
+    st.markdown('## All Sentiments')
+    st.write(df[['Datetime', 'Text', 'Username','polarity','sentiment','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 
 

@@ -121,7 +121,7 @@ tweet_count = st.sidebar.slider('Specify Number Of Tweets', 200, 5000, 20)
 
 st.sidebar.markdown('''
 ---
-Created with by [Antony Brian](https://www.linkedin.com/in/africandatascientist/).
+Created with by [Team Alpha](https://github.com/beast001/TweetClassifier/).
 ''')
 
 # Row 1
