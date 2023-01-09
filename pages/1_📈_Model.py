@@ -218,22 +218,22 @@ if dept_select == 'General':
     st.write(df_unique[['Datetime', 'Text', 'Username','Open']].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif dept_select == 'Mpesa':
-    st.markdown('## Mpesa Depertments')
+    st.markdown('## Mpesa Department')
     df_unique = df[df['Prediction'] == "Mpesa"]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
     
 elif dept_select == 'Internet':
-    st.markdown('## Internet Depertments')
+    st.markdown('## Internet Department')
     df_unique = df[df['Prediction'] == "Internet"]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif dept_select == 'Value Added Services':
-    st.markdown('## Value Added Services Depertments')
+    st.markdown('## Value Added Services Department')
     df_unique = df[df['Prediction'] == "Value added Service"]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif dept_select == 'Voice':
-    st.markdown('## Voice Depertments')
+    st.markdown('## Voice Department')
     df_unique = df[df['Prediction'] == "Voice"]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
@@ -242,7 +242,7 @@ elif dept_select == 'Customer Care':
     df_unique = df[df['Prediction'] == "Customer Care"]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 else:
-    st.markdown('## All Depertments')
+    st.markdown('## All Departments')
 
     st.write(df[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
