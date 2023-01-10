@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from pandas import Series
 import re
+import joblib
 import plost
 from datetime import date
 import string
@@ -138,6 +139,20 @@ clean_data=[]
 for i in df["Text"]:
     clean_data.append(basic_clean(i))
 
+#loading and running the model
+filename = 'saf_model.sav'
+loaded_model = joblib.load(filename)
+result = loaded_model.predict(clean_data)
+
+#adding prediction row to df
+df['Prediction']= pd.DataFrame(result)
+df.Prediction.replace({1:"General"},inplace=True)
+df.Prediction.replace({2:"Internet"},inplace=True)
+df.Prediction.replace({3:"Mpesa"},inplace=True)
+df.Prediction.replace({4:"Value added Service"},inplace=True)
+df.Prediction.replace({5:"Voice"},inplace=True)
+df.Prediction.replace({0:"Customer Care"},inplace=True)
+
 df['Clean_Tweets']=clean_data
 df['Time of Day'] = df['hour'].apply(get_time)
 
@@ -146,7 +161,7 @@ with st.container():
     with left_column:
         st.write("##")
         st.markdown('### Tweets distribution by time of day')
-        fig = plt.figure(figsize=(10, 4))
+        fig = plt.figure(figsize=(10, 5))
         sns.countplot(x="Time of Day", data=df)
         st.pyplot(fig)
 
@@ -160,8 +175,18 @@ with st.container():
         st.line_chart(tweets_df)
 
     
-       
-st.write(df[["Text", "Username","Time of Day","hour"]])
+with st.container():
+    left_column2, right_column2 = st.columns(2)
+    with left_column2:
+        st.write("##")
+        st.markdown("### Tweets Table")
+        st.write(df[["Text", "Username","Time of Day","Prediction"]])
+    with right_column2:
+        st.write('##')
+        st.write("### Tweet Distribution")
+        fig = plt.figure(figsize=(10, 6))
+        sns.countplot(x="Prediction", data=df)
+        st.pyplot(fig)
         
 
 

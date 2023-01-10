@@ -192,21 +192,26 @@ st.markdown('### Predictions for all Unreplied Tweets')
 with st.container():
     left_column, center_column,right_column =  st.columns(3)
     with left_column:
-        st.metric(label="General", value=general)
-
-        st.metric(label="Value Added Services", value=vservices)
-        
+        st.metric(label="General", value=general)        
 
     with center_column:
         st.metric(label="Mpesa", value=mpesa)
 
+    with right_column:
+        st.metric(label="Internet", value=internet)
+
+    left_column, center_column,right_column =  st.columns(3)
+    with left_column:
+        st.metric(label="Value Added Services", value=vservices)
+        
+
+    with center_column:
         st.metric(label="Customer Service", value=cservice)
 
 
     with right_column:
-        st.metric(label="Internet", value=internet)
-
         st.metric(label="Voice", value=voice)
+
 
 
 
