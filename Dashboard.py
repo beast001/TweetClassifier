@@ -108,8 +108,8 @@ st.sidebar.header('Dashboard `Safaricom_care`')
 
 
 st.sidebar.subheader('Fetch Tweets') 
-tweete_from = str(st.sidebar.date_input("From",date.today()))
-tweete_to = str(st.sidebar.date_input("To",date.today()))
+tweete_from = str(st.sidebar.date_input("From",date.today(), max_value = date.today()))
+tweete_to = str(st.sidebar.date_input("To",date.today(), max_value = date.today()))
 tweet_count = st.sidebar.slider('Specify Number Of Tweets', 200, 5000, 20)
 
 #st.sidebar.subheader('Donut chart parameter')
