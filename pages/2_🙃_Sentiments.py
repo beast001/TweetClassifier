@@ -130,7 +130,7 @@ st.sidebar.header('Departments `Safaricom_care`')
 st.sidebar.subheader('Fetch Tweets') 
 tweete_from = str(st.sidebar.date_input("From",date.today(),max_value = date.today()))
 tweete_to = str(st.sidebar.date_input("To",date.today(),max_value = date.today()))
-tweet_count = st.sidebar.slider('Specify Number Of Tweets', 200, 5000, 20)
+tweet_count = st.sidebar.slider('Specify Number Of Tweets', 0, 5000, 20)
 
 #st.sidebar.subheader('Select Department To Work On')
 st.sidebar.subheader('Select Sentiment To Work On')
