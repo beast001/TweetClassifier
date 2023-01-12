@@ -6,9 +6,18 @@ import joblib
 import plost
 from datetime import date
 import string
+import tweepy
+from datetime import datetime, timedelta
 import snscrape.modules.twitter as sntwitter
 import seaborn as sns
 import matplotlib.pyplot as plt
+
+
+#setting up twitter
+consumerKey = 'S8iEJ1hMMBit7radc5FaPZkTQ'
+consumerSecret = 'MvmrjGKV6TTbbAWpzqJtc6RuxyZEg9uwdYhdvWc5NEiucn2Gh6'
+accessToken = '1575957976090820619-vhfKRHgBKBPVS0Y7KbSmC1LqZzUNJk'
+accessTokenSecret = 'I6tU33RIVclvJxZG5H4nhDWCDzZgSrq3Dpl88b2r5mBtO'
 
 #Global Variables
 all_tweets = 0
@@ -73,17 +82,31 @@ def get_time(hour):
 #Getting todays tweets
 today = str(date.today())
 #@st.cache(allow_output_mutation=True)
-def getTweets(sincedate=today, untildate=today, maxTweets=100):
-    maxTweets = maxTweets -1
+ 
+def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, start_date=today, end_date =today,maxTweets=20):
+    # Authenticate to Twitter
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
+
+    # Create API object
+    api = tweepy.API(auth)
+
+    username = 'safaricom_care'
+
+    # Convert start_date and end_date to datetime objects
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+    end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+
+    # Search for tweets directed to specified user within the specified date range
+    tweets = tweepy.Cursor(api.search_tweets, q='to:'+username,  until=end_date).items(maxTweets)
+
     # Creating list to append tweet data to
     tweets_list = []
-    # Using TwitterSearchScraper to scrape data and append tweets to list
-    
-    for i,tweet in enumerate(sntwitter.TwitterSearchScraper('Safaricom_Care since:2016-01-20').get_items()):
-        if len(tweets_list)>maxTweets:
-            break
-        elif  tweet.username != "Safaricom_Care":
-             tweets_list.append([tweet.date, tweet.id, tweet.content, tweet.username, tweet.replyCount,'https://twitter.com/anyuser/status/'+str(tweet.id)])
+
+    # Print tweets
+    for tweet in tweets:
+        tweets_list.append([tweet.created_at, tweet.id, tweet.text, tweet.author.name, 0,'https://twitter.com/anyuser/status/'+str(tweet.id)])
+        
     # Creating a dataframe from the tweets list above
     #tweets_df = pd.DataFrame(tweets_list, columns=['Datetime', 'Tweet Id', 'Text', 'Username'])
     tweets_df = pd.DataFrame(tweets_list, columns=['Datetime', 'Tweet Id', 'Text', 'Username', 'ReplyCount', 'View'])
@@ -126,7 +149,8 @@ Created with by [Team Alpha](https://github.com/beast001/TweetClassifier/).
 ''')
 
 # Row 1
-df = getTweets(tweete_from, tweete_to, tweet_count)
+df = getTweets(consumerKey, consumerSecret, accessToken, accessTokenSecret, tweete_from, tweete_to,tweet_count)
+
 
 st.markdown('### Metrics')
 col1, col2, col3 = st.columns(3)
