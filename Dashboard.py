@@ -184,7 +184,7 @@ with st.container():
     left_column, right_column =  st.columns(2)
     with left_column:
         st.write("##")
-        st.markdown('### Tweets distribution by time of day')
+        st.markdown('### Tweets Distribution by Time of Day')
         fig = plt.figure(figsize=(10, 5))
         sns.countplot(x="Time of Day", data=df)
         st.pyplot(fig)
@@ -202,16 +202,34 @@ with st.container():
 with st.container():
     left_column2, right_column2 = st.columns(2)
     with left_column2:
-        st.write("##")
-        st.markdown("### Tweets Table")
-        st.write(df[["Text", "Username","Time of Day","Prediction"]])
+        st.write('##')
+        st.write("### Time of Day vs Category")
+        fig3 = plt.figure(figsize=(10, 6))
+        sns.set(style='white')
+        sns.countplot(x='Time of Day', hue='Prediction', data=df)
+        plt.xlabel('Time of Day')
+        plt.ylabel('Count')
+        plt.xticks(rotation=45)
+        st.pyplot(fig3)
+              
+        
     with right_column2:
         st.write('##')
         st.write("### Tweet Distribution")
         fig = plt.figure(figsize=(10, 6))
         sns.countplot(x="Prediction", data=df)
-        st.pyplot(fig)
+        st.pyplot(fig) 
+
+
         
+
+#st.write("##")
+#st.markdown("### Tweets Table")
+#st.write(df[["Text", "Username","Time of Day","Prediction"]])
+    
+        
+        
+       
 
 
 
