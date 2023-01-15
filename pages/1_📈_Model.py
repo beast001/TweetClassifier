@@ -91,7 +91,7 @@ def get_time(hour):
 today = str(date.today())
 #@st.cache(allow_output_mutation=True)
 #@st.cache(allow_output_mutation=True)
-def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, start_date=today, end_date =today,maxTweets=20):
+def getTweets(consumer_key, consumer_secret, access_token, access_token_secret,end_date =today,maxTweets=20):
     # Authenticate to Twitter
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -138,12 +138,12 @@ with open('style.css') as f:
 st.sidebar.header('Departments `Safaricom_care`')
 
 st.sidebar.subheader('Fetch Tweets') 
-tweete_from = str(st.sidebar.date_input("From",date.today(),max_value = date.today()))
-tweete_to = str(st.sidebar.date_input("To",date.today(),max_value = date.today()))
-tweet_count = st.sidebar.slider('Specify Number Of Tweets', 200, 5000, 20)
+#tweete_from = str(st.sidebar.date_input("From",date.today(),max_value = date.today()))
+tweete_to = str(st.sidebar.date_input("Fetch Tweets Until",date.today(),max_value = date.today()))
+tweet_count = st.sidebar.slider('Specify Number Of Tweets', 100, 5000, 5)
 
 st.sidebar.subheader('Select Department To Work On')
-dept_select = st.sidebar.selectbox('Select data', ('General', 'Mpesa', 'Internet', 'Value Added Services', 'Voice', 'Customer Care', 'All Departments'))
+dept_select = st.sidebar.selectbox('Select data', ('All Departments','General', 'Mpesa', 'Internet', 'Value Added Services', 'Voice', 'Customer Care'))
 
 #st.sidebar.subheader('Line chart parameters')
 #plot_data = st.sidebar.multiselect('Select data', ['temp_min', 'temp_max'], ['temp_min', 'temp_max'])
@@ -153,7 +153,7 @@ st.sidebar.markdown('''
 ---
 Created with by [Team Alpha](https://github.com/beast001/TweetClassifier/).
 ''')
-df = getTweets(consumerKey, consumerSecret, accessToken, accessTokenSecret, tweete_from, tweete_to,tweet_count)
+df = getTweets(consumerKey, consumerSecret, accessToken, accessTokenSecret,tweete_to,tweet_count)
 
 #creating clean tweets
 clean_data=[]
@@ -210,31 +210,45 @@ def make_clickable(link):
 # Column to view tweets with hyperlinks
 df['Open'] = df['View'].apply(make_clickable)
 
+#function to show number of unreplied tweets
+def unreplied(df):
+    a = len(df[df['ReplyCount'] <= 0])
+    return f"{a} unreplied"
+
+df_gen = unreplied(df[df['Prediction'] == "General"])
+df_inter = unreplied(df[df['Prediction'] == 'Internet'])
+df_mpes = unreplied(df[df['Prediction'] == "Mpesa"])
+df_vals = unreplied(df[df['Prediction'] == "Value added Service"])
+df_voic = unreplied(df[df['Prediction'] == 'Voice'])
+df_cc = unreplied(df[df['Prediction']== "Customer Care"])
+
+
+
 # Row 1
 st.markdown('### Predictions for all Unreplied Tweets')
 #row 1 columns
 with st.container():
     left_column, center_column,right_column =  st.columns(3)
     with left_column:
-        st.metric(label="General", value=general)        
+        st.metric("General", general, df_gen)        
 
     with center_column:
-        st.metric(label="Mpesa", value=mpesa)
+        st.metric("Mpesa", mpesa,df_mpes)
 
     with right_column:
-        st.metric(label="Internet", value=internet)
+        st.metric("Internet", internet, df_inter)
 
     left_column, center_column,right_column =  st.columns(3)
     with left_column:
-        st.metric(label="Value Added Services", value=vservices)
+        st.metric("Value Added Services", vservices,df_vals)
         
 
     with center_column:
-        st.metric(label="Customer Service", value=cservice)
+        st.metric("Customer Service", cservice,df_cc)
 
 
     with right_column:
-        st.metric(label="Voice", value=voice)
+        st.metric("Voice", voice,df_voic)
 
 
 

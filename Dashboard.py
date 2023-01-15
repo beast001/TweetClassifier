@@ -83,7 +83,7 @@ def get_time(hour):
 today = str(date.today())
 #@st.cache(allow_output_mutation=True)
  
-def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, start_date=today, end_date =today,maxTweets=20):
+def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, end_date =today,maxTweets=20):
     # Authenticate to Twitter
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -132,9 +132,9 @@ st.sidebar.header('Dashboard `Safaricom_care`')
 
 
 st.sidebar.subheader('Fetch Tweets') 
-tweete_from = str(st.sidebar.date_input("From",date.today(), max_value = date.today()))
-tweete_to = str(st.sidebar.date_input("To",date.today(), max_value = date.today()))
-tweet_count = st.sidebar.slider('Specify Number Of Tweets', 5, 5000, 20)
+#tweete_from = str(st.sidebar.date_input("From",date.today(), max_value = date.today()))
+tweete_to = str(st.sidebar.date_input("Fetch Tweets Until",date.today(), max_value = date.today()))
+tweet_count = st.sidebar.slider('Specify Number Of Tweets', 100, 5000, 5)
 
 #st.sidebar.subheader('Donut chart parameter')
 #donut_theta = st.sidebar.selectbox('Select data', ('q2', 'q3'))
@@ -149,13 +149,13 @@ Created with by [Team Alpha](https://github.com/beast001/TweetClassifier/).
 ''')
 
 # Row 1
-df = getTweets(consumerKey, consumerSecret, accessToken, accessTokenSecret, tweete_from, tweete_to,tweet_count)
+df = getTweets(consumerKey, consumerSecret, accessToken, accessTokenSecret, tweete_to,tweet_count)
 
 
 st.markdown('### Metrics')
 col1, col2, col3 = st.columns(3)
 col1.metric("All Tweets Fetched", all_tweets)
-col2.metric("Replied Tweets", replied_tweets, replied_tweets -unreplied_tweets)
+col2.metric("Replied Tweets", replied_tweets)
 col3.metric("Unreplied Tweets", unreplied_tweets)
 
 #creating a new column with the clean tweets

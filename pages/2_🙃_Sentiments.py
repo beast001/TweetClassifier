@@ -102,7 +102,7 @@ def get_time(hour):
 #Getting todays tweets
 today = str(date.today())
 #@st.cache(allow_output_mutation=True)
-def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, start_date=today, end_date =today,maxTweets=20):
+def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, end_date =today,maxTweets=20):
     # Authenticate to Twitter
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -150,9 +150,9 @@ with open('style.css') as f:
 st.sidebar.header('Departments `Safaricom_care`')
 
 st.sidebar.subheader('Fetch Tweets') 
-tweete_from = str(st.sidebar.date_input("From",date.today(),max_value = date.today()))
-tweete_to = str(st.sidebar.date_input("To",date.today(),max_value = date.today()))
-tweet_count = st.sidebar.slider('Specify Number Of Tweets', 200, 5000, 20)
+#tweete_from = str(st.sidebar.date_input("From",date.today(),max_value = date.today()))
+tweete_to = str(st.sidebar.date_input("Fetch Tweets Until",date.today(),max_value = date.today()))
+tweet_count = st.sidebar.slider('Specify Number Of Tweets', 100, 5000, 5)
 
 #st.sidebar.subheader('Select Department To Work On')
 st.sidebar.subheader('Select Sentiment To Work On')
@@ -163,7 +163,7 @@ st.sidebar.markdown('''
 ---
 Created with by [Team Alpha](https://github.com/beast001/TweetClassifier/).
 ''')
-df = getTweets(consumerKey, consumerSecret, accessToken, accessTokenSecret, tweete_from, tweete_to,tweet_count)
+df = getTweets(consumerKey, consumerSecret, accessToken, accessTokenSecret, tweete_to,tweet_count)
 
 #creating clean tweets
 clean_data=[]
@@ -184,12 +184,21 @@ df.loc[(df["polarity"]<0),"sentiment"] = "Negative emotion"
 df.loc[(df["polarity"].between(0,0.4,inclusive="left")),"sentiment"] = "Neutral emotion"
 
 st.markdown('### Sentiments')
+#function to show number of unreplied tweets
+def unreplied(df):
+    a = len(df[df['ReplyCount'] <= 0])
+    return f"{a} unreplied"
+df_neg = unreplied(df[df['sentiment'] == "Negative emotion"])
+df_pos = unreplied(df[df['sentiment'] == 'Positive emotion'])
+df_neu = unreplied(df[df['sentiment'] == "Neutral emotion"])
+
+
 
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Neutral Emotions", len(df[df['sentiment']=="Neutral emotion"]), '9%')
-col2.metric("Negative Emotions", len(df[df['sentiment']=="Negative emotion"]), '0%' )
-col3.metric("Positive Emotions", len(df[df['sentiment']=="Positive emotion"]), '9%')
+col1.metric("Neutral Emotions", len(df[df['sentiment']=="Neutral emotion"]), df_neu)
+col2.metric("Negative Emotions", len(df[df['sentiment']=="Negative emotion"]), df_neg )
+col3.metric("Positive Emotions", len(df[df['sentiment']=="Positive emotion"]), df_pos)
 
 def make_clickable(link):
     # target _blank to open new window
