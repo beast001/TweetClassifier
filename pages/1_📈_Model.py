@@ -113,7 +113,7 @@ def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, 
 
     # Print tweets
     for tweet in tweets:
-        tweets_list.append([tweet.created_at, tweet.id, tweet.text, tweet.author.name, 0,'https://twitter.com/anyuser/status/'+str(tweet.id)])
+        tweets_list.append([tweet.created_at, tweet.id, tweet.text, tweet.author.name, tweet.favorite_count,'https://twitter.com/anyuser/status/'+str(tweet.id)])
         
     # Creating a dataframe from the tweets list above
     #tweets_df = pd.DataFrame(tweets_list, columns=['Datetime', 'Tweet Id', 'Text', 'Username'])
@@ -244,36 +244,43 @@ if dept_select == 'General':
     #st.write(df.to_html(escape=False, index=False), unsafe_allow_html=True)
     st.markdown('## General Department')
     df_unique = df[df['Prediction'] == "General"]
+    df_unique = df_unique[df_unique['ReplyCount'] <= 0]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open']].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif dept_select == 'Mpesa':
     st.markdown('## Mpesa Department')
     df_unique = df[df['Prediction'] == "Mpesa"]
+    df_unique = df_unique[df_unique['ReplyCount'] <= 0]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
     
 elif dept_select == 'Internet':
     st.markdown('## Internet Department')
     df_unique = df[df['Prediction'] == "Internet"]
+    df_unique = df_unique[df_unique['ReplyCount'] <= 0]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif dept_select == 'Value Added Services':
     st.markdown('## Value Added Services Department')
     df_unique = df[df['Prediction'] == "Value added Service"]
+    df_unique = df_unique[df_unique['ReplyCount'] <= 0]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif dept_select == 'Voice':
     st.markdown('## Voice Department')
     df_unique = df[df['Prediction'] == "Voice"]
+    df_unique = df_unique[df_unique['ReplyCount'] <= 0]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif dept_select == 'Customer Care':
     st.markdown('## Customer Care')
     df_unique = df[df['Prediction'] == "Customer Care"]
+    df_unique = df_unique[df_unique['ReplyCount'] <= 0]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 else:
     st.markdown('## All Department')
+    df_ALL = df[df['ReplyCount'] <= 0]
 
-    st.write(df[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
+    st.write(df_ALL[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 
 

@@ -124,7 +124,7 @@ def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, 
 
     # Print tweets
     for tweet in tweets:
-        tweets_list.append([tweet.created_at, tweet.id, tweet.text, tweet.author.name, 0,'https://twitter.com/anyuser/status/'+str(tweet.id)])
+        tweets_list.append([tweet.created_at, tweet.id, tweet.text, tweet.author.name, tweet.favorite_count,'https://twitter.com/anyuser/status/'+str(tweet.id)])
         
     # Creating a dataframe from the tweets list above
     #tweets_df = pd.DataFrame(tweets_list, columns=['Datetime', 'Tweet Id', 'Text', 'Username'])
@@ -185,10 +185,11 @@ df.loc[(df["polarity"].between(0,0.4,inclusive="left")),"sentiment"] = "Neutral 
 
 st.markdown('### Sentiments')
 
+
 col1, col2, col3 = st.columns(3)
-col1.metric("Neutral Emotions", len(df[df['sentiment']=="Neutral emotion"]))
-col2.metric("Negative Emotions", len(df[df['sentiment']=="Negative emotion"]) )
-col3.metric("Positive Emotions", len(df[df['sentiment']=="Positive emotion"]))
+col1.metric("Neutral Emotions", len(df[df['sentiment']=="Neutral emotion"]), '9%')
+col2.metric("Negative Emotions", len(df[df['sentiment']=="Negative emotion"]), '0%' )
+col3.metric("Positive Emotions", len(df[df['sentiment']=="Positive emotion"]), '9%')
 
 def make_clickable(link):
     # target _blank to open new window
@@ -210,15 +211,18 @@ if sentiment_select == 'Positive':
     #st.write(df.to_html(escape=False, index=False), unsafe_allow_html=True)
     st.markdown('## Positive Sentiments')
     df_unique = df[df['sentiment'] == 'Positive emotion']
+    df_unique = df_unique[df_unique['ReplyCount'] <= 0]
     st.write(df_unique[['Datetime', 'Text', 'Username','polarity','sentiment','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 elif sentiment_select == 'Negative':
     st.markdown('## Negative Sentiments')
     df_unique = df[df['sentiment'] == "Negative emotion"]
+    df_unique = df_unique[df_unique['ReplyCount'] <= 0]
     st.write(df_unique[['Datetime', 'Text', 'Username','polarity','sentiment','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 elif sentiment_select == 'Neutral':
     st.markdown('## Neutral Sentiments')
     df_unique = df[df['sentiment'] == "Neutral emotion"]
+    df_unique = df_unique[df_unique['ReplyCount'] <= 0]
     st.write(df_unique[['Datetime', 'Text', 'Username','polarity','sentiment','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 else:

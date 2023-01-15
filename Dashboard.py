@@ -105,7 +105,7 @@ def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, 
 
     # Print tweets
     for tweet in tweets:
-        tweets_list.append([tweet.created_at, tweet.id, tweet.text, tweet.author.name, 0,'https://twitter.com/anyuser/status/'+str(tweet.id)])
+        tweets_list.append([tweet.created_at, tweet.id, tweet.text, tweet.author.name, tweet.favorite_count,'https://twitter.com/anyuser/status/'+str(tweet.id)])
         
     # Creating a dataframe from the tweets list above
     #tweets_df = pd.DataFrame(tweets_list, columns=['Datetime', 'Tweet Id', 'Text', 'Username'])
