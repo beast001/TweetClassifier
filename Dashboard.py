@@ -75,7 +75,7 @@ def get_time(hour):
     if hour > 12 and hour < 18:
         return 'Afternoon'
     else:
-        return 'Evening'
+        return 'Night'
 
 
 
