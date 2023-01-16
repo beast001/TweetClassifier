@@ -11,4 +11,5 @@ matplotlib==3.3.4
 seaborn
 streamlit-aggrid
 tweepy>=3.10.0<3.11
+xgboost==1.7.3
 
