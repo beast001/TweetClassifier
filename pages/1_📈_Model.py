@@ -88,7 +88,7 @@ def get_time(hour):
 
 
 #Getting todays tweets
-today = str(date.today())
+today = date.today() + timedelta(days=1)
 #@st.cache(allow_output_mutation=True)
 #@st.cache(allow_output_mutation=True)
 def getTweets(consumer_key, consumer_secret, access_token, access_token_secret,end_date =today,maxTweets=20):
@@ -103,7 +103,7 @@ def getTweets(consumer_key, consumer_secret, access_token, access_token_secret,e
 
     # Convert start_date and end_date to datetime objects
     #start_date = datetime.strptime(start_date, '%Y-%m-%d')
-    end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+    #end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
 
     # Search for tweets directed to specified user within the specified date range
     tweets = tweepy.Cursor(api.search_tweets, q='to:'+username,  until=end_date).items(maxTweets)
@@ -139,8 +139,8 @@ st.sidebar.header('Departments `Safaricom_care`')
 
 st.sidebar.subheader('Fetch Tweets') 
 #tweete_from = str(st.sidebar.date_input("From",date.today(),max_value = date.today()))
-tweete_to = str(st.sidebar.date_input("Fetch Tweets Until",date.today(),max_value = date.today()))
-tweet_count = st.sidebar.slider('Specify Number Of Tweets', 100, 5000, 5)
+tweete_to =st.sidebar.date_input("Fetch Tweets Until",date.today(),max_value = date.today()) + timedelta(days=1)
+tweet_count = st.sidebar.slider('Specify Number Of Tweets', 100, 5000, 20)
 
 st.sidebar.subheader('Select Department To Work On')
 dept_select = st.sidebar.selectbox('Select data', ('All Departments','General', 'Mpesa', 'Internet', 'Value Added Services', 'Voice', 'Customer Care'))
@@ -291,10 +291,10 @@ elif dept_select == 'Customer Care':
     df_unique = df_unique[df_unique['ReplyCount'] <= 0]
     st.write(df_unique[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 else:
-    st.markdown('## All Department')
+    st.markdown('## All Departments')
     df_ALL = df[df['ReplyCount'] <= 0]
 
-    st.write(df_ALL[['Datetime', 'Text', 'Username','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
+    st.write(df_ALL[['Datetime', 'Text', 'Username','Prediction','Open' ]].to_html(escape=False, index=False), unsafe_allow_html=True)
 
 
 

@@ -100,7 +100,7 @@ def get_time(hour):
 
 
 #Getting todays tweets
-today = str(date.today())
+today = date.today() + timedelta(days=1)
 #@st.cache(allow_output_mutation=True)
 def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, end_date =today,maxTweets=20):
     # Authenticate to Twitter
@@ -151,8 +151,8 @@ st.sidebar.header('Departments `Safaricom_care`')
 
 st.sidebar.subheader('Fetch Tweets') 
 #tweete_from = str(st.sidebar.date_input("From",date.today(),max_value = date.today()))
-tweete_to = str(st.sidebar.date_input("Fetch Tweets Until",date.today(),max_value = date.today()))
-tweet_count = st.sidebar.slider('Specify Number Of Tweets', 100, 5000, 5)
+tweete_to =st.sidebar.date_input("Fetch Tweets Until",date.today(),max_value = date.today()) + timedelta(days=1)
+tweet_count = st.sidebar.slider('Specify Number Of Tweets', 100, 5000, 20)
 
 #st.sidebar.subheader('Select Department To Work On')
 st.sidebar.subheader('Select Sentiment To Work On')
