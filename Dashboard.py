@@ -95,7 +95,7 @@ def getTweets(consumer_key, consumer_secret, access_token, access_token_secret, 
 
     # Convert start_date and end_date to datetime objects
     #start_date = datetime.strptime(start_date, '%Y-%m-%d')
-    #end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+    end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
 
     # Search for tweets directed to specified user within the specified date range
     tweets = tweepy.Cursor(api.search_tweets, q='to:'+username,  until=end_date).items(maxTweets)
